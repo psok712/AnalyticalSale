@@ -26,9 +26,10 @@ public class HandlerRequestUser : IHandlerRequestUser
             {
                 Console.WriteLine(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                Console.WriteLine("An unknown error has occurred.");
+                Console.WriteLine(ex.Message);
+                //Console.WriteLine("An unknown error has occurred.");
             }
 
             Message message = new Message("Do you want to continue writing queries? " +

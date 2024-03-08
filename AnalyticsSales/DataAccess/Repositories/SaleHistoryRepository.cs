@@ -6,15 +6,23 @@ namespace DataAccess.Repositories;
 
 public class SaleHistoryRepository : ISaleHistoryRepository
 {
-    private static readonly IReadOnlyList<SaleRecord> SaleHistory = 
-        JsonSerializer.Deserialize<List<SaleRecord>>(
-            File.ReadAllText(@"TestsFileJson\HistorySales.json"))!;
+    private static IReadOnlyList<SaleRecord> _saleHistory = new List<SaleRecord>();
+
+    public SaleHistoryRepository()
+    {
+        if (File.Exists(@"..\..\..\..\..\TestsFileJson\HistorySales.json"))
+            _saleHistory = JsonSerializer.Deserialize<List<SaleRecord>>(
+                File.ReadAllText(@"..\..\..\..\..\TestsFileJson\HistorySales.json"))!;
+        else
+            _saleHistory = JsonSerializer.Deserialize<List<SaleRecord>>(
+                File.ReadAllText(@"..\..\TestsFileJson\HistorySales.json"))!;
+    }
     
     public IReadOnlyList<SaleRecord> GetSalesById(long idProduct)
     {
         List<SaleRecord> salesProduct = new List<SaleRecord>();
 
-        foreach (var el in SaleHistory)
+        foreach (var el in _saleHistory)
         {
             if (el.Id == idProduct)
             {
@@ -27,6 +35,6 @@ public class SaleHistoryRepository : ISaleHistoryRepository
 
     public IReadOnlyList<SaleRecord> GetAllSales()
     {
-        return SaleHistory;
+        return _saleHistory;
     }
 }

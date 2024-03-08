@@ -1,4 +1,5 @@
-﻿using AnalysisSales.Models;
+﻿using System;
+using AnalysisSales.Models;
 
 namespace AnalysisSales.Views;
 

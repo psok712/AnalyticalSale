@@ -1,4 +1,5 @@
-﻿using DataAccess.Exceptions;
+﻿using System;
+using DataAccess.Exceptions;
 using DataAccess.Repositories;
 using Domain.Interfaces;
 using Domain.Models;
@@ -62,6 +63,7 @@ public class AnalysisSalesService : IAnalysisSalesService
         var allSales = _saleHistory.GetAllSales();
         SaleRecord? lastDayProduct = null;
         DateTime maxDateTime = DateTime.MinValue;
+        var prediction = GetSalesPrediction(idProduct, days);
         
         foreach (var sale in allSales)
         {
@@ -76,7 +78,9 @@ public class AnalysisSalesService : IAnalysisSalesService
             throw new ProductNotFoundException("Sorry, no such product found");
         }
 
-        return GetSalesPrediction(idProduct, days) - lastDayProduct.Stock;
+        return prediction - lastDayProduct.Stock < 0 
+            ? 0 
+            : prediction - lastDayProduct.Stock;
     }
 
     private static void CheckDayRange(long day)

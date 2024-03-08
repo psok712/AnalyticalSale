@@ -1,7 +1,9 @@
-﻿using AnalysisSales.Models;
+﻿using System;
+using AnalysisSales.Models;
 using AspNetAPI.Service.Interfaces;
 using DataAccess;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace AspNetAPI.Service;

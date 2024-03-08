@@ -1,4 +1,6 @@
-﻿namespace DataAccess.Exceptions;
+﻿using System;
+
+namespace DataAccess.Exceptions;
 
 public class DayOutOfRangeException : Exception
 {

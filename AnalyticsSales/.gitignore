@@ -1,9 +1,9 @@
 /.idea
-/AspNetAPI/obj
-/AspNetAPI/bin
-/ConsoleAPI/obj
-/ConsoleAPI/bin
-/Domain/obj
-/Domain/bin
-/DataAccess/obj
-/DataAccess/bin
+/AspNetAPI/.obj
+/AspNetAPI/.bin
+/ConsoleAPI/.obj
+/ConsoleAPI/.bin
+/Domain/.obj
+/Domain/.bin
+/DataAccess/.obj
+/DataAccess/.bin

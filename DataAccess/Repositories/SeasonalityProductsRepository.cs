@@ -8,23 +8,19 @@ namespace DataAccess.Repositories;
 public class SeasonalityProductsRepository : ISeasonalityProductsRepository
 {
     private static IReadOnlyList<SeasonalityRecord> _seasonalityProducts = new List<SeasonalityRecord>();
-    public SeasonalityProductsRepository()
+    
+    public SeasonalityProductsRepository(String pathFileData = @"..\TestsFileJson\SeasonalityProducts.json")
     {
-        String pathTestFileConsole = @"..\..\..\..\TestsFileJson\SeasonalityProducts.json";
-        String pathTestFileAsp = @"..\TestsFileJson\SeasonalityProducts.json";
-
-        if (OperatingSystem.IsIOS() || OperatingSystem.IsLinux())
+        var separator = Path.DirectorySeparatorChar.ToString();
+        pathFileData = pathFileData.Replace(@"\", separator);
+        var serializeOptions = new JsonSerializerOptions
         {
-            pathTestFileConsole = pathTestFileConsole.Replace(@"\", "/");
-            pathTestFileAsp = pathTestFileAsp.Replace(@"\", "/");
-        }
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        };
         
-        if (File.Exists(pathTestFileConsole))
-            _seasonalityProducts = JsonSerializer.Deserialize<List<SeasonalityRecord>>(
-                File.ReadAllText(pathTestFileConsole))!;
-        else
-            _seasonalityProducts = JsonSerializer.Deserialize<List<SeasonalityRecord>>(
-                File.ReadAllText(pathTestFileAsp))!;
+        _seasonalityProducts = JsonSerializer.Deserialize<List<SeasonalityRecord>>(
+            File.ReadAllText(pathFileData), serializeOptions)!;
     }
     
     public double GetCoefficient(long idProduct, int month)

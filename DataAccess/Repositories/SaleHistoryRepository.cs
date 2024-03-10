@@ -3,33 +3,28 @@ using Domain.Interfaces;
 using Domain.Models;
 
 namespace DataAccess.Repositories;
-
+            
 public class SaleHistoryRepository : ISaleHistoryRepository
 {
     private static IReadOnlyList<SaleRecord> _saleHistory = new List<SaleRecord>();
-
-    public SaleHistoryRepository()
+    
+    public SaleHistoryRepository(String pathFileData = @"..\TestsFileJson\HistorySales.json")
     {
-        String pathTestFileConsole = @"..\..\..\..\TestsFileJson\HistorySales.json";
-        String pathTestFileAsp =@"..\TestsFileJson\HistorySales.json";
-
-        if (OperatingSystem.IsIOS() || OperatingSystem.IsLinux())
+        var separator = Path.DirectorySeparatorChar.ToString();
+        pathFileData = pathFileData.Replace(@"\", separator);
+        var serializeOptions = new JsonSerializerOptions
         {
-            pathTestFileConsole = pathTestFileConsole.Replace(@"\", "/");
-            pathTestFileAsp = pathTestFileAsp.Replace(@"\", "/");
-        }
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        };
         
-        if (File.Exists(pathTestFileConsole))
-            _saleHistory = JsonSerializer.Deserialize<List<SaleRecord>>(
-                File.ReadAllText(pathTestFileConsole))!;
-        else
-            _saleHistory = JsonSerializer.Deserialize<List<SaleRecord>>(
-                File.ReadAllText(pathTestFileAsp))!;
+        _saleHistory = JsonSerializer.Deserialize<List<SaleRecord>>(
+            File.ReadAllText(pathFileData), serializeOptions)!;
     }
     
     public IReadOnlyList<SaleRecord> GetSalesById(long idProduct)
     {
-        List<SaleRecord> salesProduct = new List<SaleRecord>();
+        var salesProduct = new List<SaleRecord>();
 
         foreach (var el in _saleHistory)
         {

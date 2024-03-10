@@ -2,7 +2,7 @@
 
 public interface IAnalysisSalesService
 {
-    double GetAverageDaySales(long idProduct);
-    double GetSalesPrediction(long idProduct, long days);
-    double GetSalesDemand(long idProduct, long days);
+    double GetAverageDaySales(long productId);
+    double GetSalesPrediction(long productId, long days);
+    double GetSalesDemand(long productId, long days);
 }

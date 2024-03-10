@@ -3,22 +3,34 @@ using DataAccess.Repositories;
 using Domain.Interfaces;
 using Domain.Models;
 
-namespace DataAccess;
+namespace Service;
 
 public class AnalysisSalesService : IAnalysisSalesService
-{
-    private readonly ISaleHistoryRepository _saleHistory = new SaleHistoryRepository();
-    private readonly ISeasonalityProductsRepository _seasonalityProducts = new SeasonalityProductsRepository();
+{                                               
+    private readonly ISaleHistoryRepository _saleHistory;
+    private readonly ISeasonalityProductsRepository _seasonalityProducts;
+
+    public AnalysisSalesService()
+    {
+        _saleHistory = new SaleHistoryRepository();
+        _seasonalityProducts = new SeasonalityProductsRepository();
+    }
     
-    public double GetAverageDaySales(long idProduct)
+    public AnalysisSalesService(ISaleHistoryRepository saleHistory, ISeasonalityProductsRepository seasonalityProducts)
+    {
+        _saleHistory = saleHistory;
+        _seasonalityProducts = seasonalityProducts;
+    }
+    
+    public double GetAverageDaySales(long productId)
     {
         var allSales = _saleHistory.GetAllSales();
-        long countDay = 0;
+        var countDay = 0;
         long countSales = 0;
 
         foreach (var sale in allSales)
         {
-            if (sale.Id == idProduct)
+            if (sale.Id == productId)
             {
                 if (sale.Stock > 0)
                 {
@@ -34,18 +46,18 @@ public class AnalysisSalesService : IAnalysisSalesService
             : throw new ProductNotFoundException("Sorry, no such product found");
     }
 
-    public double GetSalesPrediction(long idProduct, long days)
+    public double GetSalesPrediction(long productId, long days)
     {
         CheckDayRange(days);
         
         DateTime currentDate = DateTime.Today;   
         DateTime lastDate = currentDate.AddDays(days);
         double result = 0;
-        double ads = GetAverageDaySales(idProduct);
+        double ads = GetAverageDaySales(productId);
 
         while (lastDate != currentDate)
         {
-            double seasonalityFactor = _seasonalityProducts.GetCoefficient(idProduct, lastDate.Month);
+            double seasonalityFactor = _seasonalityProducts.GetCoefficient(productId, lastDate.Month);
             long deltaDays = days > lastDate.Day ? lastDate.Day : days;
             days -= deltaDays;
             lastDate = lastDate.AddDays(-deltaDays);
@@ -55,18 +67,18 @@ public class AnalysisSalesService : IAnalysisSalesService
         return result;
     }
 
-    public double GetSalesDemand(long idProduct, long days)
+    public double GetSalesDemand(long productId, long days)
     {
         CheckDayRange(days);
         
         var allSales = _saleHistory.GetAllSales();
         SaleRecord? lastDayProduct = null;
-        DateTime maxDateTime = DateTime.MinValue;
-        var prediction = GetSalesPrediction(idProduct, days);
+        var maxDateTime = DateTime.MinValue;
+        var prediction = GetSalesPrediction(productId, days);
         
         foreach (var sale in allSales)
         {
-            if (idProduct == sale.Id && sale.Date > maxDateTime)
+            if (productId == sale.Id && sale.Date > maxDateTime)
             {
                 lastDayProduct = sale;
             }
@@ -82,9 +94,11 @@ public class AnalysisSalesService : IAnalysisSalesService
             : prediction - lastDayProduct.Stock;
     }
 
-    private static void CheckDayRange(long day)
+    private static void CheckDayRange(long days)
     {
-        if (day < 1 || day > (DateTime.MaxValue - DateTime.Today).Days)
+        var maxDayCount = (DateTime.MaxValue - DateTime.Today).Days;
+        
+        if (days < 1 || days > maxDayCount)
         {
             throw new DayOutOfRangeException("It is impossible to calculate for such a number of days.");
         }

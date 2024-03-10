@@ -1,13 +1,13 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Domain.Interfaces;
+using Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-
+builder.Services.AddTransient<IAnalysisSalesService, AnalysisSalesService>();
+    
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

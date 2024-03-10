@@ -1,4 +1,4 @@
-﻿namespace AnalysisSales.Models;
+﻿namespace Domain.Models;
 
 public record RequestUser(
     CommandRequestEnum Command,

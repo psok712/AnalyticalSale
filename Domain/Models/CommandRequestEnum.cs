@@ -1,4 +1,4 @@
-﻿namespace AnalysisSales.Models;
+﻿namespace Domain.Models;
 
 public enum CommandRequestEnum
 {

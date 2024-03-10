@@ -1,6 +1,6 @@
 ﻿namespace AnalysisSales.Interfaces;
 
-public interface IHandlerRequestUser
+public interface IHandlerAnalyticalUserRequest
 {
     void RunApplication();
 }

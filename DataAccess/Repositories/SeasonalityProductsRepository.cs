@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
+﻿using System.Text.Json;
 using DataAccess.Exceptions;
 using Domain.Interfaces;
 using Domain.Models;
@@ -12,12 +10,21 @@ public class SeasonalityProductsRepository : ISeasonalityProductsRepository
     private static IReadOnlyList<SeasonalityRecord> _seasonalityProducts = new List<SeasonalityRecord>();
     public SeasonalityProductsRepository()
     {
-        if (File.Exists(@"..\..\..\..\..\TestsFileJson\SeasonalityProducts.json"))
+        String pathTestFileConsole = @"..\..\..\..\TestsFileJson\SeasonalityProducts.json";
+        String pathTestFileAsp = @"..\TestsFileJson\SeasonalityProducts.json";
+
+        if (OperatingSystem.IsIOS() || OperatingSystem.IsLinux())
+        {
+            pathTestFileConsole = pathTestFileConsole.Replace(@"\", "/");
+            pathTestFileAsp = pathTestFileAsp.Replace(@"\", "/");
+        }
+        
+        if (File.Exists(pathTestFileConsole))
             _seasonalityProducts = JsonSerializer.Deserialize<List<SeasonalityRecord>>(
-                File.ReadAllText(@"..\..\..\..\..\TestsFileJson\SeasonalityProducts.json"))!;
+                File.ReadAllText(pathTestFileConsole))!;
         else
             _seasonalityProducts = JsonSerializer.Deserialize<List<SeasonalityRecord>>(
-                File.ReadAllText(@"..\..\TestsFileJson\SeasonalityProducts.json"))!;
+                File.ReadAllText(pathTestFileAsp))!;
     }
     
     public double GetCoefficient(long idProduct, int month)

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Domain.Interfaces;
 using Domain.Models;
 
@@ -12,12 +10,21 @@ public class SaleHistoryRepository : ISaleHistoryRepository
 
     public SaleHistoryRepository()
     {
-        if (File.Exists(@"..\..\..\..\..\TestsFileJson\HistorySales.json"))
+        String pathTestFileConsole = @"..\..\..\..\TestsFileJson\HistorySales.json";
+        String pathTestFileAsp =@"..\TestsFileJson\HistorySales.json";
+
+        if (OperatingSystem.IsIOS() || OperatingSystem.IsLinux())
+        {
+            pathTestFileConsole = pathTestFileConsole.Replace(@"\", "/");
+            pathTestFileAsp = pathTestFileAsp.Replace(@"\", "/");
+        }
+        
+        if (File.Exists(pathTestFileConsole))
             _saleHistory = JsonSerializer.Deserialize<List<SaleRecord>>(
-                File.ReadAllText(@"..\..\..\..\..\TestsFileJson\HistorySales.json"))!;
+                File.ReadAllText(pathTestFileConsole))!;
         else
             _saleHistory = JsonSerializer.Deserialize<List<SaleRecord>>(
-                File.ReadAllText(@"..\..\TestsFileJson\HistorySales.json"))!;
+                File.ReadAllText(pathTestFileAsp))!;
     }
     
     public IReadOnlyList<SaleRecord> GetSalesById(long idProduct)

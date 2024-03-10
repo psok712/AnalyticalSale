@@ -21,21 +21,6 @@ public class SaleHistoryRepository : ISaleHistoryRepository
         _saleHistory = JsonSerializer.Deserialize<List<SaleRecord>>(
             File.ReadAllText(pathFileData), serializeOptions)!;
     }
-    
-    public IReadOnlyList<SaleRecord> GetSalesById(long idProduct)
-    {
-        var salesProduct = new List<SaleRecord>();
-
-        foreach (var el in _saleHistory)
-        {
-            if (el.Id == idProduct)
-            {
-                salesProduct.Add(el);
-            }
-        }
-
-        return salesProduct;
-    }
 
     public IReadOnlyList<SaleRecord> GetAllSales()
     {

@@ -25,15 +25,13 @@ public class SeasonalityProductsRepository : ISeasonalityProductsRepository
     
     public double GetCoefficient(long idProduct, int month)
     {
-        foreach (var product in _seasonalityProducts)
-        {
-            if (product.Id == idProduct && product.Month == month)
-            {
-                return product.Coef;
-            }
-        }
+        var result = _seasonalityProducts
+            .Where(el => el.Id == idProduct && el.Month == month)
+            .ToList();
 
-        throw new ProductNotFoundException(
-            "Sorry, no such product with a seasonality factor was found in this month..");
+        return result.Count == 0
+            ? throw new ProductNotFoundException(
+                "Sorry, no such product with a seasonality factor was found in this month..")
+            : result[0].Coef;
     }
 }

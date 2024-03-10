@@ -9,3 +9,5 @@
 /Domain/bin/
 /Domain/obj/
 /AspNetAPI/AspNetAPI.http
+/Service/obj/
+/Service/bin/

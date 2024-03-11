@@ -1,6 +1,6 @@
 ﻿namespace Domain.Models;
 
-public record SaleRecord(    
+public record Sale(    
     long Id,
     DateTime Date,
     long Sales,

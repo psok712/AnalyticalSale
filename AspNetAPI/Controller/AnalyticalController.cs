@@ -7,18 +7,18 @@ namespace AspNetAPI.Controller;
 
 [ApiController]
 [Route("/api/analysis")]
-public class AnalyticalUserRequestController(IAnalysisSalesService service) : ControllerBase
+public class AnalyticalController(IAnalyticalSaleService service) : ControllerBase
 {
     [HttpGet]
     [Route("/ads")]
     [ProducesResponseType<double>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public Results<Ok<double>, NotFound, BadRequest> GetAverageDaySales([FromQuery] long idProduct)
+    public Results<Ok<double>, NotFound, BadRequest> GetAverageDaySales([FromQuery] long productId)
     {
         try
         {
-            return TypedResults.Ok(service.GetAverageDaySales(idProduct));
+            return TypedResults.Ok(service.GetAverageDaySales(productId));
         }
         catch (DayOutOfRangeException)
         {
@@ -27,6 +27,10 @@ public class AnalyticalUserRequestController(IAnalysisSalesService service) : Co
         catch (ProductNotFoundException)
         {
             return TypedResults.NotFound();
+        }
+        catch (Exception)
+        {
+            return TypedResults.BadRequest();
         }
     }
     
@@ -35,11 +39,13 @@ public class AnalyticalUserRequestController(IAnalysisSalesService service) : Co
     [ProducesResponseType<double>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public Results<Ok<double>, NotFound, BadRequest> GetSalesPrediction([FromQuery] long idProduct, [FromQuery] long days)
+    public Results<Ok<double>, NotFound, BadRequest> GetSalesPrediction(
+        [FromQuery] long productId, 
+        [FromQuery] long days)
     {
         try
         {
-            return TypedResults.Ok(service.GetSalesPrediction(idProduct, days));
+            return TypedResults.Ok(service.GetSalesPrediction(productId, days));
         }
         catch (DayOutOfRangeException)
         {
@@ -48,6 +54,10 @@ public class AnalyticalUserRequestController(IAnalysisSalesService service) : Co
         catch (ProductNotFoundException)
         {
             return TypedResults.NotFound();
+        }
+        catch (Exception)
+        {
+            return TypedResults.BadRequest();
         }
     }
     
@@ -56,11 +66,13 @@ public class AnalyticalUserRequestController(IAnalysisSalesService service) : Co
     [ProducesResponseType<double>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public Results<Ok<double>, NotFound, BadRequest> GetSalesDemand([FromQuery] long idProduct, [FromQuery] long days)
+    public Results<Ok<double>, NotFound, BadRequest> GetSalesDemand(
+        [FromQuery] long productId, 
+        [FromQuery] long days)
     {
         try
         {
-            return TypedResults.Ok(service.GetSalesDemand(idProduct, days));
+            return TypedResults.Ok(service.GetSalesDemand(productId, days));
         }
         catch (DayOutOfRangeException)
         {
@@ -69,6 +81,10 @@ public class AnalyticalUserRequestController(IAnalysisSalesService service) : Co
         catch (ProductNotFoundException)
         {
             return TypedResults.NotFound();
+        }
+        catch (Exception)
+        {
+            return TypedResults.BadRequest();
         }
     }
     

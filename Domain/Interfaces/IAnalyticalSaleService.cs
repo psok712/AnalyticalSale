@@ -1,6 +1,6 @@
 ﻿namespace Domain.Interfaces;
 
-public interface IAnalysisSalesService
+public interface IAnalyticalSaleService
 {
     double GetAverageDaySales(long productId);
     double GetSalesPrediction(long productId, long days);

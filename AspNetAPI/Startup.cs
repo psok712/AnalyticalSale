@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-builder.Services.AddTransient<IAnalysisSalesService, AnalysisSalesService>();
+builder.Services.AddTransient<IAnalyticalSaleService, AnalyticalSaleService>();
     
 var app = builder.Build();
 

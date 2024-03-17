@@ -1,0 +1,13 @@
+/.idea
+
+/AspNetAPI/obj/
+/AspNetAPI/bin/
+/ConsoleAPI/bin/
+/ConsoleAPI/obj/
+/DataAccess/bin/
+/DataAccess/obj/
+/Domain/bin/
+/Domain/obj/
+/AspNetAPI/AspNetAPI.http
+/Service/obj/
+/Service/bin/
